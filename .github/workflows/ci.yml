@@ -1,4 +1,4 @@
-name: Unity CI/CD - Windows Personal
+name: Unity CI/CD - Personal (Windows + Android)
 
 on:
   push:
@@ -6,35 +6,58 @@ on:
 
 jobs:
   build-and-email:
-    runs-on: windows-latest   # Windows runner required for StandaloneWindows64
+    runs-on: windows-latest  # Windows runner required for StandaloneWindows64
     steps:
+      # 1️⃣ Checkout repo
       - uses: actions/checkout@v3
 
-      # Build Windows without license
+      # 2️⃣ Build Windows Standalone without license activation
       - name: Build Windows
         uses: game-ci/unity-builder@v2
         with:
           unityVersion: 6000.0.55f1
           targetPlatform: StandaloneWindows64
-          buildName: GameBuild
+          buildName: GameBuildWindows
           buildPath: build/Windows
           activateLicense: false
 
-      # Zip the build using PowerShell
-      - name: Zip Build
+      # 3️⃣ Build Android without license activation
+      - name: Build Android
+        uses: game-ci/unity-builder@v2
+        with:
+          unityVersion: 6000.0.55f1
+          targetPlatform: Android
+          buildName: GameBuildAndroid
+          buildPath: build/Android
+          activateLicense: false
+          # Optional keystore if you want signed APKs
+          androidKeystoreName: ${{ secrets.ANDROID_KEYSTORE_NAME }}
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+
+      # 4️⃣ Zip Windows build
+      - name: Zip Windows Build
         shell: pwsh
         run: |
           mkdir output
           Compress-Archive -Path build/Windows/* -DestinationPath output/Game-Build-Windows.zip
 
-      # Upload artifact
-      - name: Upload Build Artifact
+      # 5️⃣ Zip Android build
+      - name: Zip Android Build
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build/Android/* -DestinationPath output/Game-Build-Android.zip
+
+      # 6️⃣ Upload build artifacts
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Game-Build
-          path: output/Game-Build-Windows.zip
+          name: Game-Builds
+          path: output/*.zip
 
-      # Send email
+      # 7️⃣ Send email notification with attachments
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -46,11 +69,11 @@ jobs:
           to: "team@example.com"
           from: "CI Bot <ci@example.com>"
           body: |
-            A new push triggered a Unity build.
+            A new push triggered Unity builds.
 
             Repo: ${{ github.repository }}
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
 
-            Windows build is ready for testing.
-          attachments: output/Game-Build-Windows.zip
+            Windows and Android builds are ready for testing.
+          attachments: output/*.zip
