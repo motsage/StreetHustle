@@ -1,4 +1,4 @@
-name: Unity CI/CD - Personal (Windows Only)
+name: Unity CI/CD - Windows Personal
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
 
 jobs:
   build-and-email:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest   # Windows runner required for StandaloneWindows64
     steps:
       - uses: actions/checkout@v3
 
-      # Build Windows Standalone without license activation
+      # Build Windows without license
       - name: Build Windows
         uses: game-ci/unity-builder@v2
         with:
@@ -18,22 +18,23 @@ jobs:
           targetPlatform: StandaloneWindows64
           buildName: GameBuild
           buildPath: build/Windows
-          activateLicense: false   # skip license
+          activateLicense: false
 
-      # Zip the build
+      # Zip the build using PowerShell
       - name: Zip Build
+        shell: pwsh
         run: |
           mkdir output
-          zip -r output/Game-Build-Windows.zip build/Windows
+          Compress-Archive -Path build/Windows/* -DestinationPath output/Game-Build-Windows.zip
 
-      # Upload build artifact
+      # Upload artifact
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Game-Build
           path: output/Game-Build-Windows.zip
 
-      # Send email notification
+      # Send email
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
