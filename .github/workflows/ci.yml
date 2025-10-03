@@ -16,6 +16,9 @@ jobs:
         with:
           unityVersion: 6000.0.55f1
           targetPlatform: StandaloneWindows64
+        env:
+          UNITY_EMAIL: ${{ secrets.MM }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
       # Zip the build
       - name: Zip Build
@@ -36,7 +39,7 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
+          username: ${{ secrets.MOEKETSIMOTSAGE }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "CI Build - ${{ github.repository }}"
           to: "team@example.com"
