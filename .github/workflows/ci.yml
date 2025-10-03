@@ -8,10 +8,9 @@ jobs:
   build-and-email:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo
       - uses: actions/checkout@v3
 
-      # Build Windows Standalone
+      # Build Windows Standalone without license activation
       - name: Build Windows
         uses: game-ci/unity-builder@v2
         with:
@@ -19,6 +18,7 @@ jobs:
           targetPlatform: StandaloneWindows64
           buildName: GameBuild
           buildPath: build/Windows
+          activateLicense: false   # skip license
 
       # Zip the build
       - name: Zip Build
