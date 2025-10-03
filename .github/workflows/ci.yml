@@ -1,4 +1,4 @@
-name: Unity CI/CD - Personal (Windows + Android)
+name: Unity CI/CD - 2022.3 LTS (Windows + Android)
 
 on:
   push:
@@ -6,31 +6,31 @@ on:
 
 jobs:
   build-and-email:
-    runs-on: windows-latest  # Windows runner required for StandaloneWindows64
+    runs-on: windows-latest   # Required for Windows Standalone builds
     steps:
       # 1️⃣ Checkout repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Build Windows Standalone without license activation
+      # 2️⃣ Build Windows Standalone
       - name: Build Windows
         uses: game-ci/unity-builder@v2
         with:
-          unityVersion: 6000.0.55f1
+          unityVersion: 2022.3.21f1  # <- Unity 2022 LTS
           targetPlatform: StandaloneWindows64
           buildName: GameBuildWindows
           buildPath: build/Windows
-          activateLicense: false
+          activateLicense: false      # skip license activation for Personal
 
-      # 3️⃣ Build Android without license activation
+      # 3️⃣ Build Android
       - name: Build Android
         uses: game-ci/unity-builder@v2
         with:
-          unityVersion: 6000.0.55f1
+          unityVersion: 2022.3.21f1
           targetPlatform: Android
           buildName: GameBuildAndroid
           buildPath: build/Android
           activateLicense: false
-          # Optional keystore if you want signed APKs
+          # Optional keystore for signed APKs
           androidKeystoreName: ${{ secrets.ANDROID_KEYSTORE_NAME }}
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
@@ -57,7 +57,7 @@ jobs:
           name: Game-Builds
           path: output/*.zip
 
-      # 7️⃣ Send email notification with attachments
+      # 7️⃣ Send email notification
       - name: Send Email
         uses: dawidd6/action-send-mail@v3
         with:
