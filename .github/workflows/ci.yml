@@ -25,7 +25,7 @@ jobs:
 
       # Upload build artifact
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Game-Build
           path: output/Game-Build.zip
