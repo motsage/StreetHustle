@@ -77274,6 +77274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b76f16622ed2cc742b3437f2a41d6d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerText: {fileID: 1272893112}
   scoreText: {fileID: 1293602028}
 --- !u!114 &1693333223
 MonoBehaviour:

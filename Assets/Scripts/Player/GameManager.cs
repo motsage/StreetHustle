@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
+    public TextMeshProUGUI timerText;
     private int score = 0;
     public Text scoreText;
 
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         score += points;
         Debug.Log($"Score increased by {points}. Total Score: {score}");
         UpdateScoreUI();
+       
     }
 
     // Returns the current score
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         if (scoreText != null)
         {
             scoreText.text = $"Score: {score}";
+            timerText.text = scoreText.text;
         }
     }
 }
