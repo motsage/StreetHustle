@@ -6,7 +6,7 @@ public class GameTester : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             Debug.Log("Test Win triggered!");
             gameManager.Win();

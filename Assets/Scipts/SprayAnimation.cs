@@ -19,6 +19,6 @@ public class SprayAnimation : MonoBehaviour
 
     public void PlayIdleAnim()
     {
-        anim.Play("Idle");
+        anim.Play("Charge@Standing Idle");
     }
 }

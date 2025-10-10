@@ -34,7 +34,7 @@ public class CubeDamage : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Cube"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             isColliding = true;
 
@@ -54,7 +54,7 @@ public class CubeDamage : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Cube"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             isColliding = true;
         }
@@ -62,7 +62,7 @@ public class CubeDamage : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Cube"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             isColliding = false;
             stockTimer = 1f; // reset for next collision
